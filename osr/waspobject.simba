@@ -888,7 +888,7 @@ end;
 
 
 // ClickHelper function used by object clicking functions.
-//This function is heavily modified with anti-ban principle's
+//This function is modified with anti-ban principle's
 function TWaspObject._ClickHelper(LeftClick: Boolean): Boolean;
 var
   i: Integer;
@@ -910,21 +910,13 @@ begin
 
   Result := MainScreen.DidRedClick or
             (not LeftClick and Filter.UpText and ChooseOption.Select(UpText));
-  if SRL.Dice(40) then
-{40% of the time we will attempt:
-1)A small mouse movement within 250 pixels of click
-2)A small pause (min. 1.6, max 4.0 sec) with 50% of moving mouse off OSRS client
-3)One of the following:
-a.Random mouse movement somewhere inside screen bounds (Gauss vs Random)
-b.Mouse movement onto an Object (Item, NPC, or Player)
--followed by a 50% of right-click for (0.7, 3.0 sec) if spectacular point (object)
--25% chance of right-click on non-spectacular points (0.2, 1.0 sec)  }
+  if SRL.Dice(20) then
+{20% of the time we will attempt:}
   begin
   wait(200, 700);
   randP := Random();
     if randP < 0.33 then
       begin
-          Sleep(300+random(700));
           repeat
             P := SRL.RandomPoint(Mouse.Position(), 250);
         until P.DistanceTo(Mouse.Position) > 50; // Make sure we move at least 50 distance
@@ -934,7 +926,7 @@ b.Mouse movement onto an Object (Item, NPC, or Player)
     begin
       if SRL.Dice(50) then
       MouseOffClient(Random(4));
-        wait(1600, 4000);
+        wait(800, 4000);
         end;
     if randP > 0.66 then
       begin
@@ -952,13 +944,13 @@ b.Mouse movement onto an Object (Item, NPC, or Player)
           if SRL.Dice(50) then
             begin
                 Mouse.Click(mouse_Right);
-                  Wait(700, 3000, wdLeft);//We may have right-clicked on an ITEM, PLAYER, or NPC so let's examine the dialog
+                  Wait(700, 2000, wdLeft);//We may have right-clicked on an ITEM, PLAYER, or NPC so let's examine the dialog
                 ChooseOption.Close();
           end else
           if SRL.Dice(25) then
               begin
                 Mouse.Click(mouse_Right);
-                  Wait(200, 1000, wdLeft);//Right-click was at unspectacular point, no need to look into the details
+                  Wait(200, 9000, wdLeft);//Right-click was at unspectacular point, no need to look into the details
                 ChooseOption.Close();
               end;
       end;
